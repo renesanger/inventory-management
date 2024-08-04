@@ -36,6 +36,7 @@ export default function Home() {
       });
     });
     setInventory(inventoryList);
+    setSearchList(inventoryList);
   };
 
   const removeItem = async (item) => {
@@ -74,6 +75,19 @@ export default function Home() {
   useEffect(() => {
     updateInventory();
   }, []);
+
+  const [searchInput, setSearchInput] = useState("");
+  const [searchList, setSearchList] = useState([]);
+  const handleSearch = (text) => {
+    setSearchInput(text);
+    if (searchInput.length > 0) {
+      var test = inventory.filter((item) => {
+        return item.name.toLowerCase().match(text);
+      });
+      setSearchList(test);
+    } else {
+    }
+  };
 
   return (
     <Box
@@ -123,6 +137,15 @@ export default function Home() {
           </Stack>
         </Box>
       </Modal>
+      <TextField
+        id="search"
+        label="Search"
+        value={searchInput}
+        variant="filled"
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+      />
       <Button
         variant="contained"
         onClick={() => {
@@ -146,8 +169,7 @@ export default function Home() {
         </Box>
 
         <Stack width="800px" height="300px" spacing={2} overfflow="auto">
-          {console.log(inventory)}
-          {inventory.map(({ name, quantity }) => (
+          {searchList.map(({ name, quantity }) => (
             <Box
               key={name}
               width="100%"
